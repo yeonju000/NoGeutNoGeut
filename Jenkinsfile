@@ -1,32 +1,42 @@
-node {
-    def app
+pipeline {
+    agent any
 
-    stage('Clone repository') {
-        git branch: 'main', url: 'https://github.com/yeonju000/NoGeutNoGeut.git' // main 브랜치 클론
-    }
-
-    stage('Build image') {
-        // Docker 이미지 빌드
-        app = docker.build("yeonju7547/open2024")
-    }
-
-    stage('Test image') {
-        // 이미지 내부에서 테스트 실행
-        app.inside {
-            sh 'npm install'  // 의존성 설치
+    stages {
+        stage('Clone repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/yeonju000/NoGeutNoGeut.git'
+            }
         }
-    }
 
-    // 배포는 master 브랜치에서만 진행
-    stage('Push image') {
-        when {
-            branch 'master'  // master 브랜치일 경우에만 실행
+        stage('Build image') {
+            steps {
+                script {
+                    app = docker.build("yeonju7547/open2024")
+                }
+            }
         }
-        steps {
-            // Docker Hub에 푸시
-            docker.withRegistry('https://registry.hub.docker.com', 'yeonju7547') {
-                app.push("${env.BUILD_NUMBER}") // 빌드 번호 태그
-                app.push("latest")              // latest 태그.
+
+        stage('Test image') {
+            steps {
+                script {
+                    app.inside {
+                        sh 'npm install'  // 의존성 설치
+                    }
+                }
+            }
+        }
+
+        stage('Push image') {
+            when {
+                branch 'main'  // master 브랜치일 경우에만 실행
+            }
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'yeonju7547') {
+                        app.push("${env.BUILD_NUMBER}") // 빌드 번호 태그
+                        app.push("latest")              // latest 태그.
+                    }
+                }
             }
         }
     }

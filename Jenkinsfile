@@ -17,11 +17,17 @@ node {
         }
     }
 
+    // 배포는 master 브랜치에서만 진행
     stage('Push image') {
-        // Docker Hub에 푸시
-        docker.withRegistry('https://registry.hub.docker.com', 'yeonju7547') {
-            app.push("${env.BUILD_NUMBER}") // 빌드 번호 태그
-            app.push("latest")              // latest 태그
+        when {
+            branch 'master'  // master 브랜치일 경우에만 실행
+        }
+        steps {
+            // Docker Hub에 푸시
+            docker.withRegistry('https://registry.hub.docker.com', 'yeonju7547') {
+                app.push("${env.BUILD_NUMBER}") // 빌드 번호 태그
+                app.push("latest")              // latest 태그
+            }
         }
     }
 }

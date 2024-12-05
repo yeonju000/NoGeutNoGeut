@@ -10,8 +10,8 @@ pipeline {
     stages {
         stage("Checkout code") {
             steps {
-                // Git 리포지토리에서 코드를 체크아웃합니다.
                 script {
+                    // Git 리포지토리에서 코드를 체크아웃합니다.
                     git url: 'https://github.com/yeonju000/NoGeutNoGeut.git', branch: 'main'
                 }
             }
@@ -30,10 +30,8 @@ pipeline {
             steps {
                 script {
                     // Docker Hub에 이미지를 푸시합니다.
-			withDockerRegistry([credentialsId: 'yeonju7547', url: 'https://index.docker.io/v1/']) {
-				sh "docker push yeonju7547/open2024:${BUILD_ID}"
-			}
-
+                    withDockerRegistry([credentialsId: 'yeonju7547', url: 'https://index.docker.io/v1/']) {
+                        sh "docker push yeonju7547/open2024:${BUILD_ID}"
                     }
                 }
             }
@@ -41,19 +39,19 @@ pipeline {
 
         stage('Deploy to GKE') {
             steps {
-                // 배포 전에 deployment.yaml 파일의 이미지를 최신 빌드 ID로 교체합니다.
                 script {
-                    sh "sed -i 's/yeonju7547\\/open2024:latest/yeonju000\\/open2024:${BUILD_ID}/g' deployment.yaml"
+                    // 배포 전에 deployment.yaml 파일의 이미지를 최신 빌드 ID로 교체합니다.
+                    sh "sed -i 's/yeonju7547\\/open2024:latest/yeonju7547\\/open2024:${BUILD_ID}/g' deployment.yaml"
+
+                    // Kubernetes Engine에 배포합니다.
+                    step([$class: 'KubernetesEngineBuilder',
+                          projectId: env.PROJECT_ID,
+                          clusterName: env.CLUSTER_NAME,
+                          location: env.LOCATION,
+                          manifestPattern: 'deployment.yaml',
+                          credentialsId: env.CREDENTIALS_ID,
+                          verifyDeployments: true])
                 }
-                
-                // Kubernetes Engine에 배포합니다.
-                step([$class: 'KubernetesEngineBuilder', 
-                      projectId: env.PROJECT_ID, 
-                      clusterName: env.CLUSTER_NAME,
-                      location: env.LOCATION, 
-                      manifestPattern: 'deployment.yaml', 
-                      credentialsId: env.CREDENTIALS_ID,
-                      verifyDeployments: true])
             }
         }
     }

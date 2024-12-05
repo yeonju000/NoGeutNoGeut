@@ -4,7 +4,7 @@ pipeline {
         PROJECT_ID = 'open-440917'       // GCP 프로젝트 ID
         CLUSTER_NAME = 'k8s'                  // GKE 클러스터 이름
         LOCATION = 'asia-northeast3-a'         // 클러스터 위치
-        CREDENTIALS_ID = 'k8s'     // GCP 인증 정보 (Jenkins에서 설정한 Google 서비스 계정 키 파일)
+        CREDENTIALS_ID = '56c1a024-6364-4e52-9008-344ed61ff6bf'     // GCP 인증 정보 (Jenkins에서 설정한 Google 서비스 계정 키 파일)
         DOCKER_IMAGE = 'yeonju7547/open2024:${BUILD_ID}'  // Docker 이미지 이름
     }
     stages {

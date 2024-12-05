@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: nogeut-app
-        image: yeonju7547/open2024:latest # Docker 이미지
+        image: yeonju7547/open2024:latest # Docker 이미지 (Jenkins에서 sed로 태그 교체됨)
         imagePullPolicy: Always
         ports:
         - containerPort: 3030
@@ -27,23 +27,23 @@ spec:
           value: "3030"
         resources:
           limits:
-            memory: "256Mi"
+            memory: "256Mi"  # 메모리 제한 증가
             cpu: "500m"
           requests:
             memory: "128Mi"
             cpu: "250m"
         livenessProbe:
           httpGet:
-            path: "/"
+            path: "/health" # 프로브 경로 수정 (앱에 맞게 조정)
             port: 3030
-          initialDelaySeconds: 3
-          periodSeconds: 5
+          initialDelaySeconds: 5
+          periodSeconds: 10
         readinessProbe:
           httpGet:
-            path: "/"
+            path: "/health" # 프로브 경로 수정 (앱에 맞게 조정)
             port: 3030
-          initialDelaySeconds: 3
-          periodSeconds: 5
+          initialDelaySeconds: 5
+          periodSeconds: 10
 
 ---
 apiVersion: v1

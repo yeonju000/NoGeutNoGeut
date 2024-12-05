@@ -1,66 +1,74 @@
 pipeline {
     agent any
     environment {
-        PROJECT_ID = 'open-440917'
-        CLUSTER_NAME = 'k8s'
-        LOCATION = 'asia-northeast3-a'
-        CREDENTIALS_ID = '56c1a024-6364-4e52-9008-344ed61ff6bf' // kubeconfig 파일 Credential ID
+        PROJECT_ID = 'open-440917'       // GCP 프로젝트 ID
+        CLUSTER_NAME = 'k8s'                  // GKE 클러스터 이름
+        LOCATION = 'asia-northeast3-a'         // 클러스터 위치
+        CREDENTIALS_ID = 'k8s'     // GCP 인증 정보 (Jenkins에서 설정한 Google 서비스 계정 키 파일)
+        DOCKER_IMAGE = 'yeonju7547/open2024:${BUILD_ID}'  // Docker 이미지 이름
     }
     stages {
-        stage('Clone repository') {
+        stage("Checkout code") {
             steps {
-                git branch: 'main', url: 'https://github.com/yeonju000/NoGeutNoGeut.git'
-            }
-        }
-
-        stage('Build image') {
-            steps {
+                // Git 리포지토리에서 코드를 체크아웃합니다.
                 script {
-                    app = docker.build("yeonju7547/open2024:${env.BUILD_ID}", "--no-cache .")
+                    git url: 'https://github.com/yeonju000/NoGeutNoGeut.git', branch: 'main'
                 }
             }
         }
 
-        stage('Test image') {
+        stage("Build image") {
             steps {
                 script {
-                    app.inside {
-                        sh 'npm install'
-                    }
+                    // Docker 이미지를 빌드합니다.
+                    sh "docker build -t yeonju7547/open2024:${BUILD_ID} ."
                 }
             }
         }
 
-        stage('Push image') {
-            when {
-                branch 'main'
-            }
+        stage("Push Docker image") {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials-id') { // Docker Hub 자격 증명 ID
-                        app.push("${env.BUILD_ID}")
-                        app.push("latest")
+                    // Docker Hub에 이미지를 푸시합니다.
+			withDockerRegistry([credentialsId: 'yeonju7547', url: 'https://index.docker.io/v1/']) {
+				sh "docker push yeonju7547/open2024:${BUILD_ID}"
+			}
+
                     }
                 }
             }
         }
 
         stage('Deploy to GKE') {
-            when {
-                branch 'main'
-            }
             steps {
+                // 배포 전에 deployment.yaml 파일의 이미지를 최신 빌드 ID로 교체합니다.
                 script {
-                    // 배포 파일에서 latest 태그를 빌드 ID로 교체
-                    sh "sed -i 's/open2024:latest/open2024:${env.BUILD_ID}/g' nogeut-app-deployment.yaml"
-
-                    // Kubernetes CLI Plugin을 통한 배포
-                    withKubeConfig([credentialsId: "${CREDENTIALS_ID}", serverUrl: "https://${LOCATION}.${CLUSTER_NAME}.k8s.io"]) {
-                        sh 'kubectl apply -f nogeut-app-deployment.yaml'
-                    }
+                    sh "sed -i 's/yeonju7547\\/open2024:latest/yeonju000\\/open2024:${BUILD_ID}/g' deployment.yaml"
                 }
+                
+                // Kubernetes Engine에 배포합니다.
+                step([$class: 'KubernetesEngineBuilder', 
+                      projectId: env.PROJECT_ID, 
+                      clusterName: env.CLUSTER_NAME,
+                      location: env.LOCATION, 
+                      manifestPattern: 'deployment.yaml', 
+                      credentialsId: env.CREDENTIALS_ID,
+                      verifyDeployments: true])
             }
         }
     }
+    post {
+        always {
+            // 항상 실행되는 부분
+            echo "Pipeline completed."
+        }
+        success {
+            // 성공 시 실행되는 부분
+            echo "Pipeline succeeded!"
+        }
+        failure {
+            // 실패 시 실행되는 부분
+            echo "Pipeline failed."
+        }
+    }
 }
-

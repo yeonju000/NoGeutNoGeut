@@ -41,5 +41,5 @@ spec:
   type: LoadBalancer # 외부에서 접근 가능하도록 설정
   ports:
   - protocol: TCP
-    port: 8080 # 외부에서 노출할 포트
+    port: 3030 # 외부에서 노출할 포트
     targetPort: 3030 # 컨테이너 내부 포트

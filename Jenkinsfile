@@ -26,6 +26,21 @@ pipeline {
             }
         }
 
+	stage('Test Docker Image') {
+            steps {
+                script {
+                    try {
+                        sh 'docker run -d -p 3030:3030 --name noguet_container yeonju7547/open2024:${BUILD_ID}'
+                        sh 'sleep 5 && curl -f http://34.64.171.14:8080/ || exit 1'
+                        echo "Container is running correctly."
+                    } catch (Exception e) {
+                        echo "Test failed. Image will not be pushed."
+                        error "Stopping pipeline due to test failure."
+                    }
+                }
+            }
+        }
+
         stage("Push Docker image") {
             steps {
                 script {
@@ -58,18 +73,24 @@ pipeline {
             }
         }
     }
-    post {
+
+	post {
         always {
-            // 항상 실행되는 부분
-            echo "Pipeline completed."
-        }
-        success {
-            // 성공 시 실행되는 부분
-            echo "Pipeline succeeded!"
+            script {
+                sh 'docker stop noguet_container || true'
+                sh 'docker rm noguet_container || true'
+            }
+            echo 'Pipeline completed.'
         }
         failure {
-            // 실패 시 실행되는 부분
-            echo "Pipeline failed."
+            script {
+                echo "Build failed. Deleting the Docker image."
+                sh 'docker rmi $DOCKER_IMAGE || true'
+            }
+        }
+        success {
+            echo 'Pipeline succeeded!'
         }
     }
+
 }

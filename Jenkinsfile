@@ -38,7 +38,10 @@ pipeline {
         }
 
         stage('Deploy to GKE') {
-            steps {
+		when {
+			branch 'main'
+		}
+		steps {
                 script {
 			sh "sed -i 's/yeonju7547\\/open2024:latest/yeonju7547\\/open2024:${BUILD_ID}/g' deployment.yaml"
                     // 배포 전에 deployment.yaml 파일의 이미지를 최신 빌드 ID로 교체합니다.	

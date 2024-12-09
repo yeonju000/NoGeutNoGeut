@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'docker run -d -p 3030:3030 --name noguet_container yeonju7547/open2024:${BUILD_ID}'
+                        sh 'docker run -d -p 3030:3030 --name noguet_container:${BUILD_ID} yeonju7547/open2024:${BUILD_ID}'
                         sh 'sleep 5 && curl -f http://34.64.171.14:3030/ || exit 1'
                         echo "Container is running correctly."
                     } catch (Exception e) {
@@ -77,8 +77,8 @@ pipeline {
 	post {
         always {
             script {
-                sh 'docker stop noguet_container || true'
-                sh 'docker rm noguet_container || true'
+                sh 'docker stop noguet_container:${BUILD_ID} || true'
+                sh 'docker rm noguet_container:${BUILD_ID} || true'
             }
             echo 'Pipeline completed.'
         }

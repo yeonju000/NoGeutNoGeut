@@ -38,6 +38,9 @@ pipeline {
         }
 
         stage('Deploy to GKE') {
+            when {
+                branch 'main'  // main 브랜치일 때만 실행
+            }
             steps {
                 script {
                     // 배포 전에 deployment.yaml 파일의 이미지를 최신 빌드 ID로 교체합니다.

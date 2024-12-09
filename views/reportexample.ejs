@@ -21,65 +21,77 @@
                         <img src="/images/logo.png" width="50px" alt="로고">
                     </a>
                 </li>
-                <li class="nav__list-item"><a href="#"> 매칭하기 </a></li>
-                <li class="nav__list-item"><a href="#"> 채팅 </a></li>
-                <li class="nav__list-item"><a href="#"> 보고서작성 </a></li>
-                <li class="nav__list-item"><a href="#"> 후기작성 </a></li>
-                <li class="nav__list-item"><a href="#"> 보고서확인 </a></li>
+                <li class="nav__list-item">
+                    <a href="/filter"> 매칭 </a>
+                </li>
+                <li class="nav__list-item">
+                    <a href="/chat"> 채팅 </a>
+                </li>
+                <li class="nav__list-item">
+                    <a href="/promiseList"> 약속 </a>
+                </li>
+                <li class="nav__list-item">
+                    <a href="/postList/1"> 게시판 </a>
+                </li>
             </ul>
         </nav>
         <div class="side__nav-container">
             <ul class="nav__list" role="navigation">
                 <li class="nav__review__list-item">
-                    <a href="/reportexample"> 예시 </a>
-                </li>
-                <li class="nav__review__list-item">
                     <a href="/reportList">보고서 목록</a>
                 </li>
             </ul>
         </div>
-        <div id="container" style="width: 900px; margin: auto;">
-        <div id="container1" style="background-color: white; width: 900px;">
-            <!-- 예시 내용 추가 -->
-           <div style="text-align: center;">
-                <h2>보고서 작성 예시</h2>
+    </header>
+    <main>
+        <div class="report__container" id="container1">
+            <h1 class="title">활동 보고서 작성 예시</h1>
+            <div class="notice__container">
+                <span class="notice">보고서는 활동 후 3일 이내에 작성해야 합니다.</span>
+                <span class="notice">활동 내용은 진행한 수업에 대한 간단한 내용을 포함해야 합니다.</span>
+                <span class="notice">자세하게 작성할 필요는 없으나 당일 수업에서 무엇을 했는지 알 수 있을 정도로 작성합니다.</span>
+                <span class="notice__red">한 번 작성한 보고서는 수정이 불가능하니 신중하게 작성해주세요.</span>
             </div>
-            
-            <ol>
-                <li>&nbsp;&nbsp;&nbsp;  1.보고서는 활동 후 3일 이내에 작성해야 합니다.</li>
-                <li>&nbsp;&nbsp;&nbsp;  2.활동 내용은 진행한 수업에 대한 간단한 내용을 포함해야 합니다.</li>
-                <li>&nbsp;&nbsp;&nbsp;  3.자세하게 작성할 필요는 없으나 당일 수업에서 무엇을 했는지 알 수 있을 정도로 작성하세요.</li>
-            </ol>
-            <!-- 날짜와 시간 입력란 -->
-            <div id="date" style="margin-left: 30px;">
-                    날짜 <input type="text" name="promiseDate" value="2023-03-03" required>
-                    시간 <input type="text" name="startTime" value="15:00" required>
+
+            <div class="report__example">
+                <!-- 날짜와 시간 입력란 -->
+                <div>
+                    <span class="date">날짜</span>
+                    <span class="date_ex"> 2024-03-03 </span>
+                    <span class="date">시간</span>
+                    <spa class="date_ex">15:00</spa>
                 </div>
                 <!-- 이름 입력란 -->
-                <div id="name" style="margin-left: 30px;">
-                    학생 이름 <input type="text" name="stdNum" value="강수정" required>
-                    노인 이름 <input type="text" name="seniorNum" value="강노인" required>
-                    보호자 이름 <input type="text" name="protectorNum" value="보호자 " required>
+                <div>
+                    <span class="name">학생 이름</span>
+                    <span class="name_ex">김학생</span>
+                    <span class="name">노인 이름</span>
+                    <span class="name_ex">박노인</span>
+                    <span class="name">보호자 이름</span>
+                    <span class="name_ex">박보호자</span>
                 </div>
-            <!-- 활동 내용 입력란 -->
-            <div id="contents" style="margin-left: 30px;">
-                <label for="reportContent">활동 내용:</label><br>
-                <textarea id="reportContent" name="reportContent" rows="4" cols="50" readonly>안녕하세요 반갑습니다.</textarea><br>
-            </div>
-                           <!-- 사진 업로드 -->
-            <div id="text"style="margin-left:30px;">사진</div>
-            <div class="image-container"style="width:700px ;height:300px; text-align: center;margin-left:30px ;">
-                <div id="picture">
-                    <img src="/images/mainhome.jpeg"style="width:300px; height=300px;margin-top:15px">
+                <!-- 활동 내용 입력란 -->
+                <div id="contents" class="content">
+                    <h3 for="reportContent" class="content__title">활동 내용</h3>
+                    <textarea class="reportContent" id="reportContent" name="reportContent" rows="4" cols="50"
+                        readonly>안녕하세요 반갑습니다.</textarea><br>
+                </div>
+                <!-- 사진 업로드 -->
+                <div class="picture">
+                    <h3 id="text" class="content__title">사진</h3>
+                    <div class="image__container">
+                        <div id="picture">
+                            <img src="/images/mainhome.jpeg" style="width:300px; height=300px;margin-top:15px">
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- 제출 버튼 -->
             <div class="button">
-                 <button onclick="submitReport()">확인</button>
+                <button onclick="submitReport()">확인</button>
             </div>
-            
         </div>
-    </div>
+    </main>
 
     <footer class="footer__container">
         <section class="pages__container">

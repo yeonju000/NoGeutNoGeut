@@ -31,7 +31,7 @@ pipeline {
                 script {
                     try {
                         sh 'docker run -d -p 3030:3030 --name noguet_container yeonju7547/open2024:${BUILD_ID}'
-                        sh 'sleep 5 && curl -f http://34.64.171.14:8080/ || exit 1'
+                        sh 'sleep 5 && curl -f http://34.64.179.9:8080/ || exit 1'
                         echo "Container is running correctly."
                     } catch (Exception e) {
                         echo "Test failed. Image will not be pushed."

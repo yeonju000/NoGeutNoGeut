@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <title>받은 보고서 목록</title>
   <link href="/css/reportList.css?v=1.0" rel="stylesheet" type="text/css">
+  <link href="/css/header.css?v=1.0" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -43,14 +44,14 @@
     </div>
     <div class="side__nav-container">
       <ul class="nav__list" role="navigation">
-        <li class="nav__review__list-item"><a href="/reportList">받은 보고서</a></li>
+        <li class="nav__report__list-item"><a href="/reportList">받은 보고서</a></li>
       </ul>
     </div>
 
   </header>
 
-  <div class="list-container">
-    <ul>
+  <div>
+    <ul class="list-container">
       <% reports.forEach(report=> { %>
         <li>
           <a href="/report/<%= report.reportNum %>">

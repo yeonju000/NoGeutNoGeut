@@ -234,7 +234,7 @@
                         }
 
                         try {
-                                const response = await fetch('/signup', {
+                                const response = await fetch('/check-email', {
                                         method: 'POST',
                                         headers: { 'Content-Type' : 'application/json' },
                                         body: JSON.stringify({ email })

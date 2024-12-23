@@ -13,4 +13,7 @@ router.get('/:id(\\d+)', postController.viewPost);
 router.post('/:id/comment', postController.createComment);
 router.post('/:id/comment/:commentID/reply', postController.createReply);
 
+router.post('/:id/comment/:commentID/delete', postController.deleteComment);
+router.post('/:id/comment/:commentID/reply/delete', postController.deleteComment);
+
 module.exports = router;

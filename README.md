@@ -38,7 +38,7 @@
 
 - 기능: https://youtu.be/Icf1lj9RxMk?feature=shared
 - cicd: https://youtu.be/9H3X_X8PFt0?feature=shared
-- error triggrt: https://youtu.be/w3NiN8Hw3dM?feature=shared
+- error trigger: https://youtu.be/w3NiN8Hw3dM?feature=shared
 
 ---
 
@@ -59,7 +59,7 @@ sudo apt update && sudo apt install -y nodejs npm
 # 패키지 설치
 npm install
 ```
-### 2.Docker로 설치
+### 2. Docker로 설치
 ```bash
 # Docker 이미지 빌드
 docker build -t 프로젝트-이름 .
@@ -75,7 +75,7 @@ docker run -p 3000:3000 프로젝트-이름
 ```bash
 node main.js
 ```
-- 기본적으로 http://localhost:3000에서 서버가 실행됩니다.
+- 기본적으로 http://localhost:3000 에서 서버가 실행됩니다.
 
 ### Docker로 실행
 ```bash
